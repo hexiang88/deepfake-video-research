@@ -1,0 +1,103 @@
+# Copy to configs/video_eval.yaml and set absolute paths on the server.
+# Do not put passwords or tokens in this file.
+# eval-host: data_root / results_dir → /data/USER/deepfake-bench and /data/USER/deepfake-bench/results
+# Official eval flags can be overridden per model after reading the cloned README.
+# Never change gpu: cuda:0 (use CUDA_VISIBLE_DEVICES instead).
+
+data_root: /data/USER/deepfake-bench
+manifest: configs/datasets.manifest.json
+results_dir: results
+default_compression: c23
+train_domain: ffpp_c23
+smoke_limit: 16
+gpu: cuda:0
+
+models:
+  lipforensics:
+    repo: https://github.com/ahaliassos/LipForensics.git
+    repo_dir: /data/USER/deepfake-bench/models/LipForensics
+    weights_dir: /data/USER/deepfake-bench/weights/lipforensics
+    weights_file: /data/USER/deepfake-bench/weights/lipforensics/lipforensics_ff.pth
+    # eval-host: python: /home/USER/miniconda3/envs/lipforensics/bin/python
+    python: python
+    workdir: /data/USER/deepfake-bench/models/LipForensics
+    tracks: [cross_dataset]
+    # Smoke = dedicated 8+8 dir. Do not rely on smoke_limit against the 200+200 set
+    # (that flag slices concatenated real-then-fake, so 16 would be 16 reals).
+    test_sets: [mentor_swap_200_smoke]
+    # Full mentor set after smoke: [mentor_swap_200]
+    # Official CelebDF later: evaluate.py --dataset CelebDF (never map mentor → CelebDF)
+  realforensics:
+    repo: https://github.com/ahaliassos/RealForensics.git
+    repo_dir: /data/USER/deepfake-bench/models/RealForensics
+    weights_dir: /data/USER/deepfake-bench/weights/realforensics
+    weights_file: realforensics_ff.pth
+    # eval-host: python: /home/USER/miniconda3/envs/realforensics/bin/python
+    python: python
+    workdir: /data/USER/deepfake-bench/models/RealForensics
+    tracks: [cross_dataset, cross_manipulation]
+    test_sets: [mentor_swap_200_smoke]
+    manipulations: [Deepfakes, FaceSwap, Face2Face, NeuralTextures]
+    # Must be false for mentor keys; official Table 2 uses eval_once with no --dataset-dir.
+    eval_once: false
+    # Official cross-dataset: python stage2/eval.py model.weights_filename=realforensics_ff.pth
+    # Place leave-one-out weights in stage2/weights as in the README.
+    manip_weights:
+      Deepfakes: realforensics_allbutdf.pth
+      FaceSwap: realforensics_allbutfs.pth
+      Face2Face: realforensics_allbutf2f.pth
+      NeuralTextures: realforensics_allbutnt.pth
+  pwtf_dvd:
+    repo: https://github.com/rama0126/PwTF-DVD.git
+    repo_dir: /data/USER/deepfake-bench/models/PwTF-DVD
+    weights_dir: /data/USER/deepfake-bench/weights/pwtf_dvd
+    python: python
+    workdir: /data/USER/deepfake-bench/models/PwTF-DVD
+    tracks: [cross_dataset]
+    test_sets: [celebdf_v2, dfdc, faceshifter, deeperforensics, dfd]
+    # Official per-video: python inference/test_on_raw_video.py --video VIDEO --out_dir OUT --model_path WEIGHTS
+    # Default wrapper: scripts/pwtf_dvd_dataset_eval.py (needs labels.csv or real/fake dirs)
+  vlaforge:
+    repo: https://github.com/mala-lab/VLAForge.git
+    repo_dir: /data/USER/deepfake-bench/models/VLAForge
+    weights_dir: /data/USER/deepfake-bench/weights/vlaforge
+    python: python
+    workdir: /data/USER/deepfake-bench/models/VLAForge
+    tracks: [cross_dataset, vlaforge_frame]
+    test_sets: [celebdf_v2, dfdc, dfd]
+    eval_once: true
+    # Official: set test_dataset in config/test.yaml, then bash test.sh
+    # Frame-level and video-level must be written to different result files.
+    eval_command: bash test.sh
+    frame_command: bash test.sh
+  auvire:
+    repo: https://github.com/mever-team/auvire.git
+    repo_dir: /data/USER/deepfake-bench/models/AuViRe
+    weights_dir: /data/USER/deepfake-bench/weights/auvire
+    # eval-host: python: /home/USER/miniconda3/envs/auvire/bin/python
+    python: python
+    workdir: /data/USER/deepfake-bench/models/AuViRe
+    tracks: [talking_face, tfl]
+    test_sets: [lav_df, av_deepfake1m]
+    eval_once: true
+    require_all_datasets: true
+    train_domain: lav_df
+    compression: n/a
+    # Official scripts/test.py (DFD+TFL). No FakeAVCeleb row in paper/repo JSON.
+    eval_command: "{python} scripts/test.py"
+  dimodif:
+    repo: https://github.com/mever-team/dimodif.git
+    repo_dir: /data/USER/deepfake-bench/models/DiMoDif
+    weights_dir: /data/USER/deepfake-bench/weights/dimodif
+    # eval-host: python: /home/USER/miniconda3/envs/dimodif/bin/python
+    python: python
+    workdir: /data/USER/deepfake-bench/models/DiMoDif
+    tracks: [talking_face, tfl]
+    test_sets: [fakeavceleb, lav_df, av_deepfake1m]
+    eval_once: true
+    require_all_datasets: true
+    train_domain: fakeavceleb
+    compression: n/a
+    # Official scripts/eval.py. Keep RVFA (fakeavceleb-wo-rvfa). Do not point
+    # test_sets at fake_fakeavceleb candidate folders or wav2lip generator dirs.
+    eval_command: "{python} scripts/eval.py"

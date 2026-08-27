@@ -1,0 +1,30 @@
+# 本地覆盖，不要提交。复制自 *.example.*
+configs/video_eval.yaml
+configs/datasets.manifest.json
+.env
+
+# 数据、权重、实验结果（仅仓库根目录；research/datasets 是文档）
+/data/
+/datasets/
+/weights/
+/results/
+/export/
+*.pt
+*.pth
+*.ckpt
+*.mp4
+*.avi
+
+# Python
+.venv/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.pytest-tmp-*/
+dist/
+build/
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+~$*.docx

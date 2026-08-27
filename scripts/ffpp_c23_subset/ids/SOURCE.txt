@@ -1,0 +1,19 @@
+Frozen FaceForensics++ ID lists for RealForensics §3.2 leave-one-out.
+
+Source of test.json / val.json:
+  https://raw.githubusercontent.com/ondyari/FaceForensics/master/dataset/splits/test.json
+  https://raw.githubusercontent.com/ondyari/FaceForensics/master/dataset/splits/val.json
+Same files are vendored in LipForensics:
+  https://github.com/ahaliassos/LipForensics/tree/main/data/datasets/Forensics/splits
+RealForensics eval reads data/Forensics/csv_files/test_real.csv and test_fake.csv
+  (140 real + 140 fake; names 000.avi / 000_003.avi). Those IDs match this test.json.
+
+Official split size (FaceForensics README + RealForensics supplement):
+  train 720 / val 140 / test 140 original videos.
+
+Default download: entire official TEST only (140 original + 140 fake x 4 methods).
+Do NOT use faceforensics_download_v4.py --num_videos N: that takes filelist.json PREFIX,
+not the test split.
+
+If someone insists on n=200: take all 140 test, then 60 more original IDs from val.json
+only (seed=20260818), never train. Fake files: both directions of the selected pairs.

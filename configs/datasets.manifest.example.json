@@ -1,0 +1,90 @@
+{
+  "note": "Copy to configs/datasets.manifest.json. Fill paths after licensed download. Do not commit real paths with personal data if they embed usernames you want private.",
+  "compression": "c23",
+  "datasets": {
+    "ffpp": {
+      "path": "/data/USER/deepfake-bench/datasets/FaceForensics++",
+      "split": "official",
+      "source": "https://github.com/ondyari/FaceForensics",
+      "applied": false,
+      "notes": "Must record c23. Application required."
+    },
+    "celebdf_v2": {
+      "path": "/data/USER/deepfake-bench/datasets/Celeb-DF-v2",
+      "split": "test",
+      "source": "https://arxiv.org/abs/1909.12962",
+      "applied": false
+    },
+    "dfdc": {
+      "path": "/data/USER/deepfake-bench/datasets/DFDC",
+      "split": "test",
+      "source": "https://arxiv.org/abs/2006.07397",
+      "applied": false,
+      "preview_only": true,
+      "notes": "If preview_only, report test_set as dfdc_preview."
+    },
+    "dfdc_preview": {
+      "path": "/data/USER/deepfake-bench/datasets/DFDC-preview",
+      "split": "test",
+      "source": "https://arxiv.org/abs/2006.07397",
+      "applied": false
+    },
+    "faceshifter": {
+      "path": "/data/USER/deepfake-bench/datasets/FaceShifter",
+      "split": "test",
+      "source": "FF++ ecosystem / official README",
+      "applied": false
+    },
+    "deeperforensics": {
+      "path": "/data/USER/deepfake-bench/datasets/DeeperForensics",
+      "split": "test",
+      "source": "official README of the evaluator",
+      "applied": false
+    },
+    "dfd": {
+      "path": "/data/USER/deepfake-bench/datasets/DFD",
+      "split": "test",
+      "source": "Google/Jigsaw Deepfake Detection",
+      "applied": false
+    },
+    "mentor_swap_200": {
+      "path": "/data/USER/deepfake-bench/datasets/mentor_swap_200",
+      "split": "test",
+      "applied": true,
+      "notes": "200 real + 200 fake, seed 20260818. Report test_set as mentor_swap_200; never Celeb-DF / FF++ / DFDC."
+    },
+    "mentor_swap_200_smoke": {
+      "path": "/data/USER/deepfake-bench/datasets/mentor_swap_200_smoke",
+      "split": "test",
+      "applied": true,
+      "notes": "8 real + 8 fake smoke subset. Prefer this over --smoke-limit on the 200 set."
+    },
+    "lav_df": {
+      "path": "/data/USER/deepfake-bench/datasets/LAV-DF",
+      "split": "official",
+      "source": "https://github.com/ControlNet/LAV-DF",
+      "applied": false,
+      "notes": "Required for AuViRe and DiMoDif TFL / cross-dataset DFD. Absent → tfl data_missing. Do not substitute wav2lip folders."
+    },
+    "av_deepfake1m": {
+      "path": "/data/USER/deepfake-bench/datasets/AV-Deepfake1M",
+      "split": "val",
+      "source": "https://github.com/ControlNet/AV-Deepfake1M",
+      "applied": false,
+      "notes": "Official local eval is validation, not Codabench test. Absent → tfl data_missing."
+    },
+    "fakeavceleb": {
+      "path": "/data/USER/deepfake-bench/datasets/FakeAVCeleb_v1.2",
+      "split": "official",
+      "source": "https://sites.google.com/view/fakeavcelebdash-lab/",
+      "applied": false,
+      "notes": "DiMoDif only. Need official meta_data.csv and RVFA/FV labels. AuViRe has no FakeAVCeleb row."
+    },
+    "fakeavceleb_candidate": {
+      "path": "/data/MENTOR_DATASETS/FakeAVCeleb",
+      "split": "unknown",
+      "applied": false,
+      "notes": "Mentor-host MENTOR_HOST path only (not eval-host). 990 mp4 candidate (待核验). Not in yaml test_sets. eval-host missing this mount does not mean the lab deleted FakeAVCeleb."
+    }
+  }
+}
